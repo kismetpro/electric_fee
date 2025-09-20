@@ -14,7 +14,10 @@ from bs4 import BeautifulSoup
 BASE_URL = "https://electricfee.vip.cpolar.cn"
 LOGIN_URL = f"{BASE_URL}/default.aspx"
 RESULTS_URL = f"{BASE_URL}/usedRecord.aspx"
-JSON_DATABASE_FILE = "electricity_data_single_room.json"
+# 获取当前文件 (app.py) 所在的目录的绝对路径
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+# 将 JSON 文件名与基础目录拼接成一个绝对路径
+JSON_DATABASE_FILE = os.path.join(BASE_DIR, "electricity_data_single_room.json")
 HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     'Origin': BASE_URL,
@@ -553,4 +556,4 @@ def api_refresh():
             return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000)
