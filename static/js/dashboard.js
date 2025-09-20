@@ -51,7 +51,7 @@ $(document).ready(function() {
         
             // 添加 loadingText 如果不存在
             if (!$('#loadingText').length) {
-                $('.settings-content').append('<p id="loadingText" style="text-align: center; color: blue;">正在设置并爬取数据...</p>');
+                $('.settings-content').append('<p id="loadingText" style="text-align: center; color: blue;">正在获取数据，请等待😘...</p>');
             }
             $('#loadingText').show();
             console.log('加载中...');
