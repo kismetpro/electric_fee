@@ -449,7 +449,14 @@ const charts = {
         document.getElementById('monthCost').textContent = `${(monthUsage * rates).toFixed(2)} 元`;
 
         // 更新时间
-        document.getElementById('lastUpdateTime').textContent = data.info ? data.info.scrape_time : '--';
+        const scrapeTime = data.info ? data.info.scrape_time : null;
+        if (scrapeTime) {
+            const date = new Date(scrapeTime);
+            date.setHours(date.getHours() + 8);
+            document.getElementById('lastUpdateTime').textContent = date.toLocaleString('zh-CN');
+        } else {
+            document.getElementById('lastUpdateTime').textContent = '--';
+        }
         console.log('DOM 更新完成');
     }
 

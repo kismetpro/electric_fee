@@ -507,7 +507,14 @@
             document.getElementById('monthUsage').textContent = `${electricityData.monthUsage} 度`;
             document.getElementById('monthCost').textContent = `${(electricityData.monthUsage * electricityData.rates).toFixed(2)} 元`;
             
-            document.getElementById('lastUpdateTime').textContent = electricityData.lastUpdate;
+            const lastUpdate = electricityData.lastUpdate;
+            if (lastUpdate) {
+                const date = new Date(lastUpdate);
+                date.setHours(date.getHours() + 8);
+                document.getElementById('lastUpdateTime').textContent = date.toLocaleString('zh-CN');
+            } else {
+                document.getElementById('lastUpdateTime').textContent = '--';
+            }
         }
 
         // 初始化图表
