@@ -1,0 +1,3 @@
+__pycache__/
+.env
+electricity_data_single_room.json

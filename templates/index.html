@@ -1,0 +1,297 @@
+<![CDATA[<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寝室电费查询</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --background: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #6c757d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary {
+            background-color: var(--info);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--success);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #results {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-bolt"></i> 寝室电费查询
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-search"></i> 查询寝室电费
+            </div>
+
+            <form id="queryForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="building">楼栋</label>
+                        <select id="building" name="building">
+                            <option value="">请选择楼栋</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="floor">楼层</label>
+                        <select id="floor" name="floor" disabled>
+                            <option value="">请先选择楼栋</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="room">房间</label>
+                        <select id="room" name="room" disabled>
+                            <option value="">请先选择楼层</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start_date">开始日期</label>
+                        <input type="date" id="start_date" name="start_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">结束日期</label>
+                        <input type="date" id="end_date" name="end_date">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">查询</button>
+            </form>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>正在查询数据...</p>
+            </div>
+
+            <div id="results">
+                <div class="card-title">
+                    <i class="fas fa-chart-bar"></i> 查询结果
+                </div>
+                <span id="remaining">剩余电量: -- 度</span>
+                <button type="button" id="refreshBtn" class="btn btn-secondary" style="margin: 10px 0;">刷新数据</button>
+                <table id="recordsTable">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>表具名称</th>
+                            <th>用电量 (度)</th>
+                            <th>金额 (元)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>寝室电费查询系统 &copy; 2023 | 数据仅供参考</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>]]>
