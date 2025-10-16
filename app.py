@@ -11,7 +11,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # --- 全局配置 ---
-BASE_URL = "https://electricfee.vip.cpolar.cn"
+BASE_URL = "https://fee.vip.cpolar.cn"
 LOGIN_URL = f"{BASE_URL}/default.aspx"
 RESULTS_URL = f"{BASE_URL}/usedRecord.aspx"
 # 获取当前文件 (app.py) 所在的目录的绝对路径
